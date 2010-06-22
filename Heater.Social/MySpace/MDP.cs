@@ -28,6 +28,7 @@ using Jayrock.Json.Conversion;
 using Heater.OAuth;
 using Heater.Social.MySpace.DataContracts.OpenSocial;
 using System.Net;
+using System.IO;
 
 namespace Heater.Social
 {
@@ -72,20 +73,6 @@ namespace Heater.Social
             ConsumerSecret = consumerSecret;
             Timeout = timeout;
             Proxy = proxy;
-        }
-
-
-        public static string GenerateMySpaceEventUrl(long appId, string path)
-        {
-            string jsonObject = string.Format("{{\"rt\":\"{0}\"}}", path);
-            return string.Format("http://apps.myspace.com/{0}?appParams={1}", appId, HttpUtility.UrlEncode(jsonObject));
-        }
-
-        [Obsolete("GenerateMySpaceEventUrl(string appId, string eventId) is depreicated, please use GenerateMySpaceEventUrl(long appId, string path).", true)]
-        public static string GenerateMySpaceEventUrl(string appId, string eventId)
-        {
-            string url = string.Format("http://apps.myspace.com/{0}?appParams={1}", appId, HttpUtility.UrlEncode("{\"rt\":\"/Event/View/" + eventId + "\"}"));
-            return url;
         }
         
         private string GenerateTemplateActivityBody(string templateId, string templateParameters)
@@ -222,7 +209,6 @@ namespace Heater.Social
         public PostActivityFeedResult PostActivityFeed(string oAuthToken, string templateId, IDictionary<string, string> templateParameters, string culture, string format)
         {
             string templateParametersString = Util.DictionaryToJson(templateParameters);
-            string body = GenerateTemplateActivityBody(templateId, templateParametersString);
             string requestTokenUrl = string.Format("http://{0}/v2/activities/@me/@self", ApiDomain);
 
             Uri uri = new Uri(requestTokenUrl);
@@ -277,7 +263,6 @@ namespace Heater.Social
         {
             string templateParametersString = Util.DictionaryToJson(templateParameters);
             string mediaItemsString = Util.ListToJson(mediaItems);
-            string body = GenerateTemplateActivityBody(templateId, templateParametersString, mediaItemsString);
             string requestTokenUrl = string.Format("http://{0}/v2/activities/@me/@self", ApiDomain);
 
             Uri uri = new Uri(requestTokenUrl);
@@ -324,7 +309,6 @@ namespace Heater.Social
             byte[] requestData = encoding.GetBytes(message);
 
             var response = HttpPost(generatedUrl, requestData);
-            Console.WriteLine(response);
             var postActivityFeedResult = (PostActivityFeedResult)JsonConvert.Import(typeof(PostActivityFeedResult), response);
             return postActivityFeedResult;
         }
@@ -371,58 +355,56 @@ namespace Heater.Social
         }
 
 
-        //public string PostNotifications(string oAuthToken, long applicationId, IDictionary<string, string> parameters)
-        //{
-        //    string templateParametersString = Util.DictionaryToJson(templateParameters);
-        //    string body = GenerateTemplateActivityBody(templateId, templateParametersString);
-        //    string requestTokenUrl = string.Format("http://{0}/v1/applications/{1}/notifications", ApiDomain, applicationId);
+        public string PostNotifications(string oAuthToken, long applicationId, string templateId, IDictionary<string, string> templateParameters, string culture, string format)
+        {
+            string templateParametersString = Util.DictionaryToJson(templateParameters);
+            string requestTokenUrl = string.Format("http://{0}/v1/applications/{1}/notifications", ApiDomain, applicationId);
+           	
+			Uri uri = new Uri(requestTokenUrl);
+            OAuthBase oAuth = new OAuthBase();
+            string nonce = oAuth.GenerateNonce();
+            string timestamp = oAuth.GenerateTimeStamp();
+            
+			List<QueryParameter> parameters = new List<QueryParameter>();
+            parameters.Add(new QueryParameter("culture", culture));
+            parameters.Add(new QueryParameter("format", format));
+            parameters.Add(new QueryParameter("templateId", templateId));
+            parameters.Add(new QueryParameter("templateParameters", templateParametersString));
+			
+            string signature =
+                oAuth.GenerateSignature(
+                        uri,
+                        ConsumerKey,
+                        ConsumerSecret,
+                        oAuthToken,
+                        "",
+                        "POST",
+                        timestamp,
+                        nonce,
+                        SignatureTypes.HMACSHA1,
+                        parameters);
+            
+			string requestTokenUrlFormat = "{0}?culture={1}&format={2}&oauth_consumer_key={3}&oauth_nonce={4}&oauth_signature_method={5}&oauth_timestamp={6}&oauth_token={7}&oauth_version={8}&oauth_signature={9}";
+            
+			string generatedUrl = string.Format(
+				requestTokenUrlFormat,
+                requestTokenUrl,
+                culture,
+                format,
+                OAuthBase.UrlEncode(ConsumerKey),
+                OAuthBase.UrlEncode(nonce),
+                OAuthBase.UrlEncode("HMAC-SHA1"),
+                OAuthBase.UrlEncode(timestamp),
+                OAuthBase.UrlEncode(oAuthToken),
+                OAuthBase.UrlEncode("1.0"),
+                OAuthBase.UrlEncode(signature));
 
-        //    Uri uri = new Uri(requestTokenUrl);
-        //    OAuthBase oAuth = new OAuthBase();
-        //    string nonce = oAuth.GenerateNonce();
-        //    string timestamp = oAuth.GenerateTimeStamp();
-        //    List<QueryParameter> parameters = new List<QueryParameter>();
-        //    parameters.Add(new QueryParameter("culture", culture));
-        //    parameters.Add(new QueryParameter("format", format));
-        //    parameters.Add(new QueryParameter("templateId", templateId));
-        //    parameters.Add(new QueryParameter("templateParameters", templateParametersString));
-
-        //    string signature =
-        //        oAuth.GenerateSignature(
-        //                uri,
-        //                ConsumerKey,
-        //                ConsumerSecret,
-        //                oAuthToken,
-        //                "",
-        //                "POST",
-        //                timestamp,
-        //                nonce,
-        //                SignatureTypes.HMACSHA1,
-        //                parameters);
-        //    string requestTokenUrlFormat = "http://{0}/v2/activities/@me/@self?culture={1}&format={2}&oauth_consumer_key={3}&oauth_nonce={4}&oauth_signature_method={5}&oauth_timestamp={6}&oauth_token={7}&oauth_version={8}&oauth_signature={9}";
-
-        //    string generatedUrl = string.Format(
-        //        requestTokenUrlFormat,
-        //        ApiDomain,
-        //        culture,
-        //        format,
-        //        OAuthBase.UrlEncode(ConsumerKey),
-        //        OAuthBase.UrlEncode(nonce),
-        //        OAuthBase.UrlEncode("HMAC-SHA1"),
-        //        OAuthBase.UrlEncode(timestamp),
-        //        OAuthBase.UrlEncode(oAuthToken),
-        //        OAuthBase.UrlEncode("1.0"),
-        //        OAuthBase.UrlEncode(signature));
-
-        //    string message = GenerateTemplateActivityBody(templateId, OAuthBase.UrlEncode(templateParametersString));
-        //    UTF8Encoding encoding = new UTF8Encoding();
-        //    byte[] requestData = encoding.GetBytes(message);
-
-        //    Stream stream = HttpPostStream(generatedUrl, requestData);
-        //    DataContractJsonSerializer postActivityFeedResultSerializer = new DataContractJsonSerializer(typeof(PostActivityFeedResult));
-        //    PostActivityFeedResult postActivityFeedResult = postActivityFeedResultSerializer.ReadObject(stream) as PostActivityFeedResult;
-        //    return postActivityFeedResult;
-        //}
-
+            string message = GenerateTemplateActivityBody(templateId, OAuthBase.UrlEncode(templateParametersString));
+            UTF8Encoding encoding = new UTF8Encoding();
+            byte[] requestData = encoding.GetBytes(message);
+			
+			var response = HttpPost(generatedUrl, requestData);
+			return response;
+        }
     }
 }

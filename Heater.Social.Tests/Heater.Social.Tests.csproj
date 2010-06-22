@@ -55,7 +55,6 @@
     <Compile Include="MySpaceMdpTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TweetMemeTests.cs" />
-    <Compile Include="TwitterBasicAuthTests.cs" />
     <Compile Include="TwitterOAuthTests.cs" />
   </ItemGroup>
   <ItemGroup>

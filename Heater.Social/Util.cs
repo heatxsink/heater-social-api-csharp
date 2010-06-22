@@ -191,7 +191,7 @@ namespace Heater.Social
                 requestStream.Write(requestBody, 0, requestBody.Length);
                 requestStream.Flush();
             }
-            var responseBody = string.Empty;
+			
             var response = (HttpWebResponse)request.GetResponse();
 
             Cookie userCookie = new Cookie();
@@ -202,7 +202,8 @@ namespace Heater.Social
                     userCookie = cookie;
                 }
             }
-
+			
+			var responseBody = string.Empty;
             using (var receiveStream = response.GetResponseStream())
             using (var reader = new System.IO.StreamReader(receiveStream, System.Text.Encoding.UTF8))
             {

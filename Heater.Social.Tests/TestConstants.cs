@@ -76,9 +76,7 @@ namespace Heater.Social.Tests
         public static readonly string TWITTER_CONSUMER_SECRET = "lZS22Xw4oBbRRywDAkjRfv0IKDu1Tm1LIK3HEAMEm4";
         
         public static readonly string TWITTER_USERNAME_READ = "myspaceevents";
-        public static readonly string TWITTER_USERNAME = "iamjackscolon69";
-        public static readonly string TWITTER_PASSWORD = "sl1ngsh0t";
-
+		
         public static readonly string API_MS_CONSUMER_KEY = "217ef0b423ed48b0bdacc83db0617ea8";
         public static readonly string API_MS_CONSUMER_SECRET = "cb62fb90374c44a7a179eef4009bf0de";
         public static readonly string API_ACCESS_TOKEN = "2MESAGRG+p89AAM0RCDaMEofpmfS6ppWFvtSkLY5g/oAKQ8nLSUPAWEa/+ZFHISvYgRx8DwHwc4/+Ct5FHkHrX/y/ENyEvTLf0Tj+yE2OyA=";

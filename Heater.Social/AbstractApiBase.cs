@@ -239,7 +239,6 @@ namespace Heater.Social
                 requestStream.Write(requestBody, 0, requestBody.Length);
                 requestStream.Flush();
             }
-            var responseBody = string.Empty;
             var response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
         }
@@ -263,7 +262,6 @@ namespace Heater.Social
                 requestStream.Write(requestBody, 0, requestBody.Length);
                 requestStream.Flush();
             }
-            var responseBody = string.Empty;
             var response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
         }
@@ -302,7 +300,6 @@ namespace Heater.Social
             {
                 requestStream.Write(requestBody, 0, requestBody.Length);
             }
-            var responseBody = string.Empty;
             var response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
         }
