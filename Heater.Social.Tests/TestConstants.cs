@@ -66,7 +66,10 @@ namespace Heater.Social.Tests
 
     public static class TestConstants
     {
-        public static readonly string TWITTER_ACCESS_TOKEN = "62468094-cL9fcmxniVm03MFAtFpdWeTHdyy36VqiGyxwxwkU";
+		public static readonly string BITLY_LOGIN = "heatxsink";
+        public static readonly string BITLY_API_KEY = "R_a1b0e0940029c19c492af4e6720602b9";
+        
+		public static readonly string TWITTER_ACCESS_TOKEN = "62468094-cL9fcmxniVm03MFAtFpdWeTHdyy36VqiGyxwxwkU";
         public static readonly string TWITTER_ACCESS_SECRET = "5dOVprzdGQZhHpYRFDiAZTCW4GEtK1UYd72THW7xkc";
 
         public static readonly string TWITTER_CONSUMER_KEY = "udOtwbB709Ya0lil02dhQ";

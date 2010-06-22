@@ -30,9 +30,6 @@ namespace Heater.Social.Tests
     [TestFixture]
     public class BitlyTests
     {
-        private string BITLY_LOGIN = "heatxsink";
-        private string BITLY_API_KEY = "R_a1b0e0940029c19c492af4e6720602b9";
-
         [Test]
         public void ShortenTest()
         {
