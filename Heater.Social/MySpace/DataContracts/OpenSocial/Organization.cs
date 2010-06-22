@@ -1,0 +1,65 @@
+﻿// The MIT License
+// 
+// Copyright (c) 2010 Nicholas A. Granado
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to 
+// deal in the Software without restriction, including without limitation 
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+// and/or sell copies of the Software, and to permit persons to whom the 
+// Software is furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// DEALINGS IN THE SOFTWARE.
+
+using Jayrock.Json.Conversion;
+
+namespace Heater.Social.MySpace.DataContracts.OpenSocial
+{
+    public class Organization
+    {
+        [JsonMemberName("address")]
+        public Address Address { get; set; }
+
+        [JsonMemberName("department")]
+        public string Department { get; set; }
+
+        [JsonMemberName("description")]
+        public string Description { get; set; }
+
+        [JsonMemberName("endDate")]
+        public string EndDate { get; set; }
+
+        [JsonMemberName("name")]
+        public string Name { get; set; }
+
+        [JsonMemberName("startDate")]
+        public string StartDate { get; set; }
+
+        [JsonMemberName("type")]
+        public string Type { get; set; }
+
+        [JsonMemberName("title")]
+        public string Title { get; set; }
+
+        [JsonMemberName("field")]
+        public string Field { get; set; }
+
+        [JsonMemberName("subField")]
+        public string SubField { get; set; }
+
+        [JsonMemberName("webpage")]
+        public string Webpage { get; set; }
+
+        [JsonMemberName("salary")]
+        public string Salary { get; set; }
+    }
+}
