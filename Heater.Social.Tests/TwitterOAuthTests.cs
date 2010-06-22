@@ -78,7 +78,7 @@ namespace Heater.Social.Tests
             try
             {
                 var text = "Hi, this is a direct message.";
-                var response = tweet.SendDirectMessage(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TwitterConstants.USERNAME_READ, text);
+                var response = tweet.SendDirectMessage(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TestConstants.TWITTER_USERNAME_READ, text);
                 Assert.AreEqual(text, response.Text);
                 Console.WriteLine("{0}", response.Text);
                 Console.WriteLine(response.ToJson());
@@ -114,8 +114,8 @@ namespace Heater.Social.Tests
 
             try
             {
-                var response = tweet.ShowUser(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TwitterConstants.USERNAME_READ);
-                Assert.AreEqual(TwitterConstants.USERNAME_READ, response.ScreenName);
+                var response = tweet.ShowUser(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TestConstants.TWITTER_USERNAME_READ);
+                Assert.AreEqual(TestConstants.TWITTER_USERNAME_READ, response.ScreenName);
                 Console.WriteLine(response.ToJson());
             }
             catch (WebException ex)
@@ -177,7 +177,7 @@ namespace Heater.Social.Tests
 
             try
             {
-                var response = tweet.GetFriends(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TwitterConstants.USERNAME_READ, -1);
+                var response = tweet.GetFriends(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, TestConstants.TWITTER_USERNAME_READ, -1);
                 Assert.AreEqual(2, response.Users.Length);
                 Console.WriteLine("TOTAL: {0}", response.Users.Length);
                 foreach (User user in response.Users)
@@ -200,9 +200,7 @@ namespace Heater.Social.Tests
 
             try
             {
-                var token = "963611-CU0E9O3z4G95WCNgX0WZG5jZhvpOfcT970XZKxAj4";
-                var secret = "7L2KxsEBnndBhQPZ2x5yzHQ4Nso5pwuQPVXV93xzo";
-                var response = tweet.GetFollowers(token, secret, "heatxsink", -1);
+                var response = tweet.GetFollowers(TestConstants.TWITTER_ACCESS_TOKEN, TestConstants.TWITTER_ACCESS_SECRET, "heatxsink", -1);
                 Assert.GreaterOrEqual(response.Users.Length, 2);
                 Console.WriteLine("TOTAL:{0}", response.Users.Length);
                 foreach (User user in response.Users)

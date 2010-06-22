@@ -20,8 +20,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
 
-using Heater.Social.Tests.TweetMeme;
-using Heater.Social.Tests.TweetMeme.DataContracts;
+using Heater.Social.TweetMeme;
+using Heater.Social.TweetMeme.DataContracts;
 using NUnit.Framework;
 using System;
 

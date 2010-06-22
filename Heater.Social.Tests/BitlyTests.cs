@@ -33,7 +33,7 @@ namespace Heater.Social.Tests
         [Test]
         public void ShortenTest()
         {
-            BitlyApi api = new BitlyApi(BITLY_LOGIN, BITLY_API_KEY);
+            BitlyApi api = new BitlyApi(TestConstants.BITLY_LOGIN, TestConstants.BITLY_API_KEY);
             ShortenResponse response = api.Shorten("http://www.heatxsink.com");
             Console.WriteLine(response.ToJson());
         }
