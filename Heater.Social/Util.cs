@@ -192,9 +192,7 @@ namespace Heater.Social
                 requestStream.Flush();
             }
 			
-            var response = (HttpWebResponse)request.GetResponse();
-
-            Cookie userCookie = new Cookie();
+			Cookie userCookie = new Cookie();
             foreach (Cookie cookie in jar.GetCookies(new Uri(string.Format("https://www.{0}", domain))))
             {
                 if (cookie.Name.Equals("USER"))
@@ -203,13 +201,6 @@ namespace Heater.Social
                 }
             }
 			
-			var responseBody = string.Empty;
-            using (var receiveStream = response.GetResponseStream())
-            using (var reader = new System.IO.StreamReader(receiveStream, System.Text.Encoding.UTF8))
-            {
-                responseBody = reader.ReadToEnd();
-            }
-
             return userCookie;
         }
     }
