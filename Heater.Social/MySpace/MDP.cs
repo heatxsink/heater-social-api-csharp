@@ -75,19 +75,7 @@ namespace Heater.Social
             Proxy = proxy;
         }
         
-        private string GenerateTemplateActivityBody(string templateId, string templateParameters)
-        {
-            string templateFormat = "templateId={0}&templateParameters={1}";
-            return string.Format(templateFormat, templateId, templateParameters);
-        }
-
-        private string GenerateTemplateActivityBody(string templateId, string templateParameters, string mediaItems)
-        {
-            string templateFormat = "templateId={0}&templateParameters={1}&mediaItems={2}";
-            return string.Format(templateFormat, templateId, templateParameters, mediaItems);
-        }
-
-        #region OAuth
+		#region OAuth
         
         public OAuthTuple GetRequestToken()
         {
@@ -164,7 +152,20 @@ namespace Heater.Social
         }
 
         #endregion OAuth
+		
+		
+        private string GenerateTemplateActivityBody(string templateId, string templateParameters)
+        {
+            string templateFormat = "templateId={0}&templateParameters={1}";
+            return string.Format(templateFormat, templateId, templateParameters);
+        }
 
+        private string GenerateTemplateActivityBody(string templateId, string templateParameters, string mediaItems)
+        {
+            string templateFormat = "templateId={0}&templateParameters={1}&mediaItems={2}";
+            return string.Format(templateFormat, templateId, templateParameters, mediaItems);
+        }
+		
         public PersonInfo GetMySpaceInfo(string oAuthToken)
         {
             return GetMySpaceInfo(oAuthToken, string.Empty);

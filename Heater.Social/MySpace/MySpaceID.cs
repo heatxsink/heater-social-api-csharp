@@ -73,6 +73,84 @@ namespace Heater.Social
             Proxy = proxy;
         }
 
+		#region OAuth
+        
+        public OAuthTuple GetRequestToken()
+        {
+            string requestTokenUrl = string.Format("http://{0}/request_token", ApiDomain);
+            OAuthBase oAuth = new OAuthBase();
+            string nonce = oAuth.GenerateNonce();
+            string timestamp = oAuth.GenerateTimeStamp();
+            
+            string signature =
+                oAuth.GenerateSignature(
+                        new Uri(requestTokenUrl),
+                        ConsumerKey,
+                        ConsumerSecret,
+                        "",
+                        "",
+                        "GET",
+                        timestamp,
+                        nonce,
+                        SignatureTypes.HMACSHA1);
+
+            string requestTokenUrlFormat = "{0}?oauth_consumer_key={1}&oauth_nonce={2}&oauth_signature={3}&oauth_signature_method={4}&oauth_timestamp={5}&oauth_token={6}&oauth_version={7}";
+            string generatedRequestTokenUrl = string.Format(
+                requestTokenUrlFormat, 
+                requestTokenUrl,
+                OAuthBase.UrlEncode(ConsumerKey), 
+                OAuthBase.UrlEncode(nonce), 
+                OAuthBase.UrlEncode(signature), 
+                OAuthBase.UrlEncode("HMAC-SHA1"), 
+                OAuthBase.UrlEncode(timestamp), 
+                OAuthBase.UrlEncode(""), 
+                OAuthBase.UrlEncode("1.0"));
+
+            string requestToken = HttpGet(generatedRequestTokenUrl);
+            return Util.ParseQueryString(requestToken);
+        }
+
+        public OAuthTuple GetAccessToken(string oAuthToken, string oAuthTokenSecret)
+        {
+            OAuthBase oAuth = new OAuthBase();
+            string accessTokenUrl = string.Format("http://{0}/access_token", ApiDomain);
+            string timestamp = oAuth.GenerateTimeStamp();
+            string nonce = oAuth.GenerateNonce();
+
+            string signatureAccess = oAuth.GenerateSignature(
+                new Uri(accessTokenUrl),
+                ConsumerKey,
+                ConsumerSecret,
+                oAuthToken,
+                oAuthTokenSecret,
+                "GET",
+                timestamp,
+                nonce,
+                SignatureTypes.HMACSHA1);
+
+            string accessQueryParametersFormat = "{0}?oauth_consumer_key={1}&oauth_token={2}&oauth_signature_method={3}&oauth_signature={4}&oauth_timestamp={5}&oauth_nonce={6}&oauth_version={7}";
+            string generatedAccessTokenUrl = string.Format(
+                accessQueryParametersFormat, 
+                accessTokenUrl,
+                OAuthBase.UrlEncode(ConsumerKey), 
+                OAuthBase.UrlEncode(oAuthToken), 
+                OAuthBase.UrlEncode("HMAC-SHA1"), 
+                OAuthBase.UrlEncode(signatureAccess), 
+                OAuthBase.UrlEncode(timestamp), 
+                OAuthBase.UrlEncode(nonce), 
+                OAuthBase.UrlEncode("1.0"));
+            
+            string accessTokenReturn = HttpGet(generatedAccessTokenUrl);
+            return Util.ParseQueryString(accessTokenReturn);
+        }
+
+        public string GetAuthorizationUrl(string callbackUrl, string oAuthToken)
+        {
+            return string.Format("http://{0}/authorize?oauth_callback={1}&oauth_token={2}", ApiDomain, OAuthBase.UrlEncode(callbackUrl), OAuthBase.UrlEncode(oAuthToken));
+        }
+
+        #endregion OAuth
+		
         public string GetUserInfo(string oAuthToken, string oAuthTokenSecret, string format)
         {
             return GetUserInfo(oAuthToken, oAuthTokenSecret, format, FIELDS);
